@@ -35,4 +35,29 @@ describe('App', () => {
 
     expect(window.alert).toHaveBeenCalledTimes(1);
   });
+
+  test('does not interrupt premium users', async () => {
+    window.alert.mockImplementationOnce(() => true);
+
+    const { getAllByLabelText, getByText } = render(<App />);
+
+    const premiumButton = getByText('Become premium');
+
+    // becoming premium
+    await userEvent.click(premiumButton);
+
+    const eurosInputs = getAllByLabelText('EUR');
+
+    expect(eurosInputs.length).toBe(2);
+
+    await userEvent.type(eurosInputs[1], '1');
+    await userEvent.type(eurosInputs[1], '2');
+    await userEvent.type(eurosInputs[1], '3');
+    await userEvent.type(eurosInputs[0], '4');
+    await userEvent.type(eurosInputs[0], '5');
+
+    await userEvent.type(eurosInputs[0], '6');
+
+    expect(window.alert).toHaveBeenCalledTimes(0);
+  });
 });
