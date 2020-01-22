@@ -9,7 +9,7 @@ import BecomePremiumButton from './BecomePremiumButton';
 import usePreferredColorScheme from '../hooks/usePreferredColorScheme';
 import useCachedState from '../hooks/useCachedState';
 
-export default function App({ maxConversionCount }) {
+export default function App({ maxConversionCount, converters = [] }) {
   const [conversionCount, setConversionCount] = useState(0);
   const preferredColorScheme = usePreferredColorScheme();
   const [selectedTheme, setSelectedTheme] = useCachedState('theme', '');
@@ -42,20 +42,17 @@ export default function App({ maxConversionCount }) {
         </header>
 
         <section className="App__section">
-          <Converter
-            cryptoLabel="Bitcoins"
-            cryptoShortLabel="BTC"
-            exchangeRate={0.5}
-            onConvert={handleConvert}
-          />
-
-          <Converter
-            focusOnMount
-            cryptoLabel="Ethereum"
-            cryptoShortLabel="ETH"
-            exchangeRate={1.2}
-            onConvert={handleConvert}
-          />
+          {converters.map(converterConfig => {
+            return (
+              <Converter
+                key={converterConfig.shortLabel}
+                cryptoLabel={converterConfig.label}
+                cryptoShortLabel={converterConfig.shortLabel}
+                exchangeRate={converterConfig.exchangeRate}
+                onConvert={handleConvert}
+              />
+            );
+          })}
         </section>
       </main>
     </ConverterContext.Provider>
@@ -64,4 +61,11 @@ export default function App({ maxConversionCount }) {
 
 App.propTypes = {
   maxConversionCount: PropTypes.number.isRequired,
+  converters: PropTypes.arrayOf(
+    PropTypes.shape({
+      shortLabel: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      exchangeRate: PropTypes.number.isRequired,
+    }),
+  ),
 };

@@ -19,18 +19,27 @@ describe('App', () => {
   test('interrupts the user after 5 conversions', async () => {
     window.alert.mockImplementationOnce(() => true);
     const maxConversionCount = 5;
+    const converters = [
+      {
+        label: 'Test Converter',
+        shortLabel: 'TC',
+        exchangeRate: 0.4,
+      },
+    ];
 
     const { getAllByLabelText } = render(
-      <App maxConversionCount={maxConversionCount} />,
+      <App maxConversionCount={maxConversionCount} converters={converters} />,
     );
 
     const eurosInputs = getAllByLabelText('EUR');
 
-    expect(eurosInputs.length).toBe(2);
+    expect(eurosInputs.length).toBe(converters.length);
 
     for (let i = maxConversionCount; i >= 0; i--) {
       // 🐛?
-      await userEvent.type(eurosInputs[i % 2], `${i}`);
+      const randomIndex = Math.floor(Math.random() * eurosInputs.length);
+
+      await userEvent.type(eurosInputs[randomIndex], `${i}`);
     }
 
     expect(window.alert).toHaveBeenCalledTimes(1);
@@ -39,9 +48,16 @@ describe('App', () => {
   test('does not interrupt premium users', async () => {
     window.alert.mockImplementationOnce(() => true);
     const maxConversionCount = 4;
+    const converters = [
+      {
+        label: 'Test Converter',
+        shortLabel: 'TC',
+        exchangeRate: 0.4,
+      },
+    ];
 
     const { getAllByLabelText, getByText } = render(
-      <App maxConversionCount={maxConversionCount} />,
+      <App converters={converters} maxConversionCount={maxConversionCount} />,
     );
 
     const premiumButton = getByText('Become premium');
@@ -51,10 +67,12 @@ describe('App', () => {
 
     const eurosInputs = getAllByLabelText('EUR');
 
-    expect(eurosInputs.length).toBe(2);
+    expect(eurosInputs.length).toBe(converters.length);
 
     for (let i = maxConversionCount; i >= 0; i--) {
-      await userEvent.type(eurosInputs[i % 2], `${i}`);
+      const randomIndex = Math.floor(Math.random() * eurosInputs.length);
+
+      await userEvent.type(eurosInputs[randomIndex], `${i}`);
     }
 
     expect(window.alert).toHaveBeenCalledTimes(0);
