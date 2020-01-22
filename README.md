@@ -12,6 +12,24 @@
 We are starting on master branch to make all our changes.
 You can checkout `final` branch to see all changes.
 
+## Steps (Testing)
+
+We have to be gold standard in the Cryptocurrency conversion industry. Lets implement some tests:
+
+To set your tests app, install `@testing-library/react`, `@testing-library/user-event`, and `@testing-library/dom` with either `yarn add <your-dep>` or `npm install <your-dep>`.
+
+22. Start by making sure our core functionality behaves as expected. Create tests for the `<Converter />` component that checks titles and labels are rendered as expected. _For that you should use the `render` function on the `@testing-library/react`. This docs might be useful https://testing-library.com/docs/react-testing-library/api#render_
+
+23. Time to test some interactions too. Are euros converted as expected by our `<Context />`? _For that you can use `@testing-library/user-event`. Docs on this repo might help https://github.com/testing-library/user-event_
+
+24. Our Product Owner wants to make sure that users feel the pain of not being premium. Test if the app interrupts the user as expected. _Use mock functions. https://jestjs.io/docs/en/mock-functions_
+
+25. Our PO thinks is fair to make sure that premium users are not bothered by banners or confirmation modals. _Use mock functions too_
+
+26. Industry is growing. We have to be able to ship our app with different configurations. Make our app decide from `props` the conversors (and their convertion rate) shown, as well as the non premium conversor threshold to show the banner.
+
+27. Update and add the test cases that you find convinient.
+
 ## Steps (Moving to Hooks)
 
 14. `PremiumLabel` component is already a functional component, so we can already use hooks here. Change it's background when users have selected the "Dark Theme".
