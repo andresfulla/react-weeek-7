@@ -30,8 +30,6 @@ To set your tests app, install `@testing-library/react`, `@testing-library/user-
 
 27. Update and add the test cases that you find convinient.
 
-28. Add some tests to make sure our themes functionality renders styles as expected. _use `@testing-library/dom` expect by importing `@testing-library/jest-dom/extend-expect`_
-
 ## Steps (Moving to Hooks)
 
 14. `PremiumLabel` component is already a functional component, so we can already use hooks here. Change it's background when users have selected the "Dark Theme".
