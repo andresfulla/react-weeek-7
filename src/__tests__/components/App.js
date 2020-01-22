@@ -18,28 +18,31 @@ describe('App', () => {
   });
   test('interrupts the user after 5 conversions', async () => {
     window.alert.mockImplementationOnce(() => true);
+    const maxConversionCount = 5;
 
-    const { getAllByLabelText } = render(<App />);
+    const { getAllByLabelText } = render(
+      <App maxConversionCount={maxConversionCount} />,
+    );
 
     const eurosInputs = getAllByLabelText('EUR');
 
     expect(eurosInputs.length).toBe(2);
 
-    await userEvent.type(eurosInputs[1], '1');
-    await userEvent.type(eurosInputs[1], '2');
-    await userEvent.type(eurosInputs[1], '3');
-    await userEvent.type(eurosInputs[0], '4');
-    await userEvent.type(eurosInputs[0], '5');
-    // 🐛?
-    await userEvent.type(eurosInputs[0], '6');
+    for (let i = maxConversionCount; i >= 0; i--) {
+      // 🐛?
+      await userEvent.type(eurosInputs[i % 2], `${i}`);
+    }
 
     expect(window.alert).toHaveBeenCalledTimes(1);
   });
 
   test('does not interrupt premium users', async () => {
     window.alert.mockImplementationOnce(() => true);
+    const maxConversionCount = 4;
 
-    const { getAllByLabelText, getByText } = render(<App />);
+    const { getAllByLabelText, getByText } = render(
+      <App maxConversionCount={maxConversionCount} />,
+    );
 
     const premiumButton = getByText('Become premium');
 
@@ -50,13 +53,9 @@ describe('App', () => {
 
     expect(eurosInputs.length).toBe(2);
 
-    await userEvent.type(eurosInputs[1], '1');
-    await userEvent.type(eurosInputs[1], '2');
-    await userEvent.type(eurosInputs[1], '3');
-    await userEvent.type(eurosInputs[0], '4');
-    await userEvent.type(eurosInputs[0], '5');
-
-    await userEvent.type(eurosInputs[0], '6');
+    for (let i = maxConversionCount; i >= 0; i--) {
+      await userEvent.type(eurosInputs[i % 2], `${i}`);
+    }
 
     expect(window.alert).toHaveBeenCalledTimes(0);
   });

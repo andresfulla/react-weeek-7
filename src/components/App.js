@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Converter from './Converter';
 import ConverterContext from '../contexts/ConverterContext';
 import PremiumLabel from './PremiumLabel';
@@ -8,9 +9,7 @@ import BecomePremiumButton from './BecomePremiumButton';
 import usePreferredColorScheme from '../hooks/usePreferredColorScheme';
 import useCachedState from '../hooks/useCachedState';
 
-const MAX_CONVERSION_COUNT = 5;
-
-export default function App() {
+export default function App({ maxConversionCount }) {
   const [conversionCount, setConversionCount] = useState(0);
   const preferredColorScheme = usePreferredColorScheme();
   const [selectedTheme, setSelectedTheme] = useCachedState('theme', '');
@@ -23,11 +22,11 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (!premium && conversionCount > MAX_CONVERSION_COUNT) {
+    if (!premium && conversionCount > maxConversionCount) {
       alert('Convert without limits with out Premium Package');
       setConversionCount(0);
     }
-  }, [conversionCount, premium]);
+  }, [conversionCount, maxConversionCount, premium]);
 
   return (
     <ConverterContext.Provider value={{ theme, premium }}>
@@ -62,3 +61,7 @@ export default function App() {
     </ConverterContext.Provider>
   );
 }
+
+App.propTypes = {
+  maxConversionCount: PropTypes.number.isRequired,
+};
