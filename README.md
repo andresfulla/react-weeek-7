@@ -16,7 +16,7 @@ You can checkout `final` branch to see all changes.
 
 We have to be gold standard in the Cryptocurrency conversion industry. Lets implement some tests:
 
-To set your tests app, install `@testing-library/react`, `@testing-library/user-event`, and `@testing-library/dom` with either `yarn add <your-dep>` or `npm install <your-dep>`.
+To set your tests app, install `@testing-library/react`, `@testing-library/user-event`, and `@testing-library/jest-dom` with either `yarn add <your-dep>` or `npm install <your-dep>`.
 
 22. Start by making sure our core functionality behaves as expected. Create tests for the `<Converter />` component that checks titles and labels are rendered as expected. _For that you should use the `render` function on the `@testing-library/react`. This docs might be useful https://testing-library.com/docs/react-testing-library/api#render_
 
